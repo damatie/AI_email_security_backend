@@ -1,0 +1,49 @@
+# .gitignore
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+.venv/
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Conda
+conda-env/
+
+# IDEs
+.vscode/
+.idea/
+
+# Environment variables
+.env
+.env.local
+*.key
+*.pem
+
+#PostgreSQL
+.pg_dump
+
+#Scripts
+generate_key.py
+
+# Docker
+docker-compose.override.yml
+
+# Alembic
+migrations/
+alembic/versions/*.pyc
+alembic/versions/__pycache__/
+
+# FastAPI
+*.lock
+
+# Pytest
+.pytest_cache/
+
+# Logs
+*.log
