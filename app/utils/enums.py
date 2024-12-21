@@ -1,48 +1,65 @@
-# app/utils/enums.py
 from enum import Enum
 
 class UserStatusEnum(Enum):
-    PENDING = "pending"
-    ACTIVE = "active"
-    INACTIVE = "inactive"
-    SUSPENDED = "suspended"
+    PENDING = "PENDING"
+    ACTIVE = "ACTIVE"
+    INACTIVE = "INACTIVE"
+    SUSPENDED = "SUSPENDED"
 
 class RoleEnum(Enum):
-    SUPER_ADMIN = "super_admin"
-    COMPANY_ADMIN = "company_admin"
-    USER = "user"
+    SUPER_ADMIN = "SUPER_ADMIN"
+    COMPANY_ADMIN = "COMPANY_ADMIN"
+    COMPANY_MANAGER = "COMPANY_MANAGER"
+    COMPANY_ANALYST = "COMPANY_ANALYST"
+    COMPANY_USER = "COMPANY_USER"         
+    SUPPORT_AGENT = "SUPPORT_AGENT"
+    INDIVIDUAL_USER = "INDIVIDUAL_USER" 
 
 class ResourceEnum(Enum):
-    USERS = "users"
-    COMPANIES = "companies"
-    SETTINGS = "settings"
-    EMAILS = "emails"
-    THREAT_ANALYSIS = "threat_analysis"
+    USERS = "USERS"
+    COMPANIES = "COMPANIES"
+    SETTINGS = "SETTINGS"
+    EMAILS = "EMAILS"
+    THREAT_ANALYSIS = "THREAT_ANALYSIS"
+    INTEGRATIONS = "INTEGRATIONS"
+    DASHBOARD = "DASHBOARD"
+
+class UserTypeEnum(str, Enum):
+    INDIVIDUAL = "INDIVIDUAL"
+    COMPANY = "COMPANY"
 
 class PermissionEnum(Enum):
-    CREATE = "create"
-    READ = "read"
-    UPDATE = "update"
-    DELETE = "delete"
-    LIST = "list"
+    CREATE = "CREATE"
+    READ = "READ"
+    UPDATE = "UPDATE"
+    DELETE = "DELETE"
+    LIST = "LIST"
+    MANAGE = "MANAGE"
+    EXECUTE = "EXECUTE"
+
+
+class PlanTypeEnum(str, Enum):
+    INDIVIDUAL_PLAN = "INDIVIDUAL_PLAN"
+    COMPANY_PLAN = "COMPANY_PLAN"
 
 class EmailProviderEnum(str, Enum):
-    """Enum for supported email providers"""
-    GMAIL = "gmail"
-    OUTLOOK = "outlook"
+    GMAIL = "GMAIL"
+    OUTLOOK = "OUTLOOK"
+    YAHOO = "YAHOO"
+    EXCHANGE = "EXCHANGE"
+    IMAP = "IMAP"
 
 class ThreatTypeEnum(str, Enum):
-    """Enum for different types of email threats"""
-    PHISHING = "phishing"
-    SPAM = "spam"
-    MALWARE = "malware"
-    SUSPICIOUS = "suspicious"
-    CLEAN = "clean"
-
+    PHISHING = "PHISHING"
+    SPAM = "SPAM"
+    MALWARE = "MALWARE"
+    SUSPICIOUS = "SUSPICIOUS"
+    CLEAN = "CLEAN"
+    BEC = "BEC"
+    IMPERSONATION = "IMPERSONATION"
 
 class ThreatSeverityEnum(str, Enum):
-    """Enum for threat severity levels"""
-    HIGH = "high"
-    MEDIUM = "medium"
-    LOW = "low"
-    NONE = "none"
+    HIGH = "HIGH"
+    MEDIUM = "MEDIUM"
+    LOW = "LOW"
+    NONE = "NONE"

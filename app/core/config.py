@@ -4,6 +4,7 @@ from typing import Optional, List
 from functools import lru_cache
 import secrets
 
+
 class Settings(BaseSettings):
     # Project settings
     PROJECT_NAME: str = "Email Security System"
@@ -15,6 +16,13 @@ class Settings(BaseSettings):
     PORT: int = 8000
     WORKERS: int = 4
     RELOAD: bool = False  # Set to True for development
+
+    # Redis configuration
+    REDIS_HOST: str = "redis"
+    REDIS_PORT: int =  6379
+    REDIS_DB: int =  0
+    REDIS_PASSWORD: str =None
+
     
     # Security settings
     SECRET_KEY: str = secrets.token_urlsafe(32)
@@ -31,7 +39,7 @@ class Settings(BaseSettings):
     # Database settings
     POSTGRES_USER: str
     POSTGRES_PASSWORD: str
-    POSTGRES_SERVER: str
+    POSTGRES_SERVER: str ="db"
     POSTGRES_PORT: str
     POSTGRES_DB: str
     DATABASE_POOL_SIZE: int = 5
@@ -44,6 +52,9 @@ class Settings(BaseSettings):
     ACCESS_TOKEN_EXPIRE_MINUTES: int 
     REFRESH_TOKEN_EXPIRE_DAYS: int 
     EMAIL_TOKEN_EXPIRE_MINUTES: int
+
+    # OTP settings
+    VALID_WINDOW: int
     
     # Email settings
     EMAIL_USERNAME: str 

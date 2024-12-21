@@ -9,10 +9,10 @@ from app.core.security import create_verification_token
 from app.utils.enums import  UserStatusEnum
 import logging
 
-router = APIRouter()
+resend_verification_router = APIRouter()
 logger = logging.getLogger(__name__)
 
-@router.post("/resend-verification", status_code=status.HTTP_200_OK)
+@resend_verification_router.post("/resend-verification", status_code=status.HTTP_200_OK)
 async def resend_verification_email(
     email: str, db: Session = Depends(get_db), email_service: EmailService = Depends()
 ):

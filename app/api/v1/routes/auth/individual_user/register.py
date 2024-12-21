@@ -6,16 +6,16 @@ from app.db.deps import get_db
 from app.schemas.auth.individual_user.register import RegisterNewUserRequest, RegisterNewUserResponse
 from app.models import User, Role
 from app.core.security import get_password_hash
-from app.utils.enums import RoleEnum, UserStatusEnum
+from app.utils.enums import RoleEnum, UserStatusEnum, UserTypeEnum
 from app.services.email_service import EmailService
 from app.core.security import create_verification_token, get_password_hash
 import logging
 
-router = APIRouter()
+register_individual_user_router = APIRouter()
 
 from app.services.email_service import EmailService
 
-@router.post("/", response_model=RegisterNewUserResponse, status_code=status.HTTP_201_CREATED)
+@register_individual_user_router.post("/", response_model=RegisterNewUserResponse, status_code=status.HTTP_201_CREATED)
 async def user_register(
     user_data: RegisterNewUserRequest,
     db: Session = Depends(get_db),
@@ -35,7 +35,7 @@ async def user_register(
             )
         
         # Assign the USER role
-        role = db.query(Role).filter(Role.name == RoleEnum.USER).first()
+        role = db.query(Role).filter(Role.name == RoleEnum.INDIVIDUAL_USER).first()
         if not role:
             logger.error("Default role (USER) not configured in the database.")
             raise HTTPException(
@@ -54,8 +54,8 @@ async def user_register(
             last_name=user_data.last_name,
             status=UserStatusEnum.PENDING,
             is_active=True,
-            onboarding_completed=False,
             verification_token=token,
+            user_type = UserTypeEnum.INDIVIDUAL,
             role_id=role.id,
         )
         db.add(new_user)

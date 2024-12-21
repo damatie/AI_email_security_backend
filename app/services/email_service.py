@@ -1,5 +1,3 @@
-# app/services/email_service.py
-
 from smtplib import SMTP, SMTPException
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
@@ -46,25 +44,13 @@ class EmailService:
                 status_code=500,
                 detail="Email sending failed. Please try again later.",
             )
-
+    # Send verification email
     def send_verification_email(self, email: str, token: str):
         """
         Sends an email verification link to the user's email address.
         """
         verification_link = f"http://127.0.0.1:8000/auth/verify_email/{token}"
         subject = "Verify Your Email Address"
-
-        plain_body = f"""
-        Hi,
-
-        Please click the following link to verify your email address:
-        {verification_link}
-
-        If you did not create this account, please ignore this email.
-
-        Regards,
-        Your App Team
-        """
 
         html_body = f"""
         <html>
@@ -78,4 +64,27 @@ class EmailService:
         </html>
         """
 
-        self.send_email(email, subject, plain_body, html_body)
+        self.send_email(email, subject, html_body)
+
+    # Send OTP
+    def send_otp_email(self, email: str, otp: str):
+        """
+        Sends a One-Time Password (OTP) to the user's email address.
+        """
+        subject = "Your One-Time Password (OTP)"
+        
+
+        html_body = f"""
+        <html>
+        <body>
+            <p>Hi,</p>
+            <p>Your One-Time Password (OTP) is:</p>
+            <h2>{otp}</h2>
+            <p>This OTP is valid for <strong>10 minutes</strong>. Please do not share it with anyone.</p>
+            <p>If you did not request this OTP, please contact our support team.</p>
+            <p>Regards,<br>Your App Team</p>
+        </body>
+        </html>
+        """
+
+        self.send_email(email, subject, html_body)

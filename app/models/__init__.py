@@ -8,8 +8,10 @@ from .company import Company
 from .company_settings import CompanySettings
 from .email import Email
 from .email_attachment import EmailAttachment
-from .threat_analysis import ThreatAnalysis
+from .phishing_analysis import PhishingAnalysis
+from .email_attachment_threat_analysis import AttachmentThreatAnalysis
 from .user_notification import UserNotification
+from .email_integrations import EmailIntegration
 
 __all__ = [
     'Base',
@@ -21,6 +23,8 @@ __all__ = [
     'CompanySettings',
     'Email',
     'EmailAttachment',
-    'ThreatAnalysis',
-    'UserNotification'
+    'PhishingAnalysis',
+    'AttachmentThreatAnalysis',
+    'UserNotification',
+    'EmailIntegration'
 ]

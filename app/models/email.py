@@ -18,13 +18,13 @@ class Email(Base):
     received_at = Column(DateTime(timezone=True), nullable=False)
     processed_at = Column(DateTime(timezone=True), nullable=True)
     is_processed = Column(Boolean, default=False)
-    email_metadata = Column(JSON, nullable=True)  # Renamed to avoid conflict with SQLAlchemy
+    email_metadata = Column(JSON, nullable=True)  
     created_at = Column(DateTime(timezone=True), server_default=func.now())
 
     # Relationships
     user = relationship("User", back_populates="emails")
-    threat_analysis = relationship("ThreatAnalysis", back_populates="email", uselist=False)
     attachments = relationship("EmailAttachment", back_populates="email")
+    phishing_analysis = relationship("PhishingAnalysis", back_populates="email", uselist=False)
 
     def __repr__(self):
         return f"<Email(id={self.id}, subject={self.subject}, user_id={self.user_id})>"

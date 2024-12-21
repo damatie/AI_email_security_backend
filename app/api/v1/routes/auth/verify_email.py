@@ -7,9 +7,9 @@ from app.db.deps import get_db
 from app.core.security import decode_verification_token
 from app.utils.enums import  UserStatusEnum
 
-router = APIRouter()
+verify_email_router = APIRouter()
 
-@router.get("/verify_email/{token}", status_code=status.HTTP_200_OK)
+@verify_email_router.get("/verify_email/{token}", status_code=status.HTTP_200_OK)
 async def verify_email(token: str, db: Session = Depends(get_db)):
     """
     Verify the user's email address using the token.

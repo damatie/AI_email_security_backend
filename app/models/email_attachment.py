@@ -17,6 +17,7 @@ class EmailAttachment(Base):
 
     # Relationships
     email = relationship("Email", back_populates="attachments")
+    email_attachment_threat_analysis = relationship("AttachmentThreatAnalysis", back_populates="attachment", uselist=False)
 
     def __repr__(self):
         return f"<EmailAttachment(email_id={self.email_id}, filename={self.filename})>"
