@@ -1,3 +1,4 @@
+# app/api/v1/routes/auth/login.py
 from fastapi import APIRouter, HTTPException, Depends, status, Request
 from fastapi.responses import JSONResponse
 from sqlalchemy.orm import Session
@@ -5,20 +6,22 @@ from app.db.deps import get_db
 from app.models import User, TwoFactorAuth
 from app.schemas.auth.login import LoginSchema, LoginResponseSchema
 from app.core.security import verify_password, create_access_token
-from app.services.email_service import EmailService
+from app.services.email_services.email_sending_service import EmailSendingService
 from app.utils.enums import UserStatusEnum
 from app.core.config import settings
 from app.core.redis import redis_client
+from app.utils.response_helper import create_response
 import pyotp
 import logging
 import uuid
 
 # Initialize router and email service
 login_router = APIRouter()
-email_service = EmailService()
+email_service = EmailSendingService()
 
 # Configure logger
 logger = logging.getLogger(__name__)
+
 
 @login_router.post("/", response_model=LoginResponseSchema, status_code=status.HTTP_200_OK)
 async def login(
@@ -37,7 +40,11 @@ async def login(
         logger.warning(f"Login failed: User not found for email {email} from IP: {request.client.host}")
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
-            detail={"status": "error", "msg": "Invalid email or password.", "data": None},
+            detail=create_response(
+                status="error",
+                msg="Invalid email or password.",
+                data=None,
+            ),
         )
 
     # Check if user is active
@@ -45,7 +52,11 @@ async def login(
         logger.warning(f"Login failed: Inactive account for email {email} from IP: {request.client.host}")
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
-            detail={"status": "error", "msg": "Account is inactive or not verified.", "data": None},
+            detail=create_response(
+                status="error",
+                msg="Account is inactive or not verified.",
+                data=None,
+            ),
         )
 
     # Validate password
@@ -53,7 +64,11 @@ async def login(
         logger.warning(f"Login failed: Incorrect password for email {email} from IP: {request.client.host}")
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
-            detail={"status": "error", "msg": "Invalid email or password.", "data": None},
+            detail=create_response(
+                status="error",
+                msg="Invalid email or password.",
+                data=None,
+            ),
         )
 
     # Check if 2FA is enabled
@@ -70,10 +85,10 @@ async def login(
 
         # Create response and set the temp_token as an HTTP-only cookie
         response = JSONResponse(
-            content={
-                "status": "success",
-                "msg": "Two-factor authentication is required to complete login.",
-                "data": {
+            content=create_response(
+                status="success",
+                msg="Two-factor authentication is required to complete login.",
+                data={
                     "two_factor_required": True,
                     "user": {
                         "id": user.id,
@@ -82,7 +97,7 @@ async def login(
                         "last_name": user.last_name,
                     },
                 },
-            }
+            )
         )
         response.set_cookie(key="temp_token", value=temp_token, httponly=True, max_age=600, secure=True)
         return response
@@ -91,10 +106,10 @@ async def login(
     token = create_access_token({"sub": user.email}, settings.JWT_SECRET_KEY)
 
     logger.info(f"Login successful for {email}")
-    return {
-        "status": "success",
-        "msg": "Login successful.",
-        "data": {
+    return create_response(
+        status="success",
+        msg="Login successful.",
+        data={
             "access_token": token,
             "two_factor_required": False,
             "user": {
@@ -104,4 +119,4 @@ async def login(
                 "last_name": user.last_name,
             },
         },
-    }
+    )

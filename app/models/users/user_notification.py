@@ -1,7 +1,7 @@
-# app/models/user_notification.py
+# app/models/users/user_notification.py
 from sqlalchemy import Column, Integer, String, Boolean, ForeignKey, DateTime, JSON
 from sqlalchemy.orm import relationship
-from .base import Base
+from ..base import Base
 from sqlalchemy.sql import func
 
 class UserNotification(Base):

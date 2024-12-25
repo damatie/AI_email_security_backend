@@ -1,8 +1,9 @@
+# app/models/users/user.py
 from sqlalchemy import Column, Integer, String, Boolean, ForeignKey, DateTime, Enum, CheckConstraint
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
-from .base import Base
-from ..utils.enums import UserStatusEnum, UserTypeEnum
+from ..base import Base
+from ...utils.enums import UserStatusEnum, UserTypeEnum
 
 class User(Base):
     __tablename__ = 'users'
@@ -24,6 +25,7 @@ class User(Base):
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
 
     # Relationships
+    # subscriptions = relationship("Subscription", back_populates="user")
     company = relationship("Company", back_populates="users")
     role = relationship("Role", back_populates="users")
     emails = relationship("Email", back_populates="user")

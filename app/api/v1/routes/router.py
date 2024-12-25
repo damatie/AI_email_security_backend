@@ -1,6 +1,7 @@
 # Main Router - app/api/v1/router.py
-from fastapi import APIRouter, Depends
-from app.api.v1.routes.auth import register_individual_user_router,register_company_router,verify_email_router, resend_verification_router,login_router,login_2fa_router,individual_user_onboarding_router
+from fastapi import APIRouter
+from app.api.v1.routes.auth import register_individual_user_router,register_company_router,verify_email_router, resend_verification_router,login_router,login_2fa_router,individual_user_onboarding_router;
+from app.api.v1.routes.email.email_providers import email_providers_router
 
 router = APIRouter()
 
@@ -11,11 +12,7 @@ router.include_router(
     tags=["Individual User - Authentication"]
 )
 
-router.include_router(
-    register_company_router,
-    prefix="/auth/register_company",
-    tags=["Company/Business - Authentication"]
-)
+
 
 router.include_router(
     verify_email_router,
@@ -26,23 +23,35 @@ router.include_router(
 router.include_router(
     resend_verification_router,
     prefix="/auth",
-    tags=["Resend Email Verification - Authentication"]
+    tags=["Email Verification - Authentication"]
 )
 
 router.include_router(
     login_router,
     prefix="/auth/login",
-    tags=["Login - Authentication"]
+    tags=["Individual User - Authentication"]
 )
 
 router.include_router(
     login_2fa_router,
     prefix="/auth/login-2fa",
-    tags=["Login - Authentication"]
+     tags=["Individual User - Authentication"]
 )
 
 router.include_router(
     individual_user_onboarding_router,
     prefix="/individual_user",
-    tags=["Individual User - Onboarding"]
+    tags=["Individual User - Onboarding (To be reviewed)"]
+)
+
+router.include_router(
+    email_providers_router,
+    prefix="/email/providers",
+    tags=["Email Providers"]
+)
+
+router.include_router(
+    register_company_router,
+    prefix="/auth/register_company",
+    tags=["Company/Business - Authentication"]
 )

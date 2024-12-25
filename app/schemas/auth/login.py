@@ -15,7 +15,7 @@ class LoginSchema(BaseModel):
         }
 
 
-class UserSchema(BaseModel):
+class UserResponseDataSchema(BaseModel):
     id: int
     email: EmailStr
     first_name: Optional[str]
@@ -32,10 +32,10 @@ class UserSchema(BaseModel):
         }
 
 
-class LoginDataSchema(BaseModel):
+class LoginResponseDataSchema(BaseModel):
     access_token: Optional[str] = None
     two_factor_required: bool
-    user: UserSchema
+    user: UserResponseDataSchema
 
     class Config:
         json_schema_extra = {
@@ -55,7 +55,7 @@ class LoginDataSchema(BaseModel):
 class LoginResponseSchema(BaseModel):
     status: str
     msg: str
-    data: LoginDataSchema
+    data: LoginResponseDataSchema
 
     class Config:
         json_schema_extra = {

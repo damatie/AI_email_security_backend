@@ -1,7 +1,7 @@
-# app/models/company_settings.py
+# app/models/companies/company_settings.py
 from sqlalchemy import Column, Integer, Float, Boolean, JSON, ForeignKey, DateTime
 from sqlalchemy.orm import relationship
-from .base import Base
+from ..base import Base
 from sqlalchemy.sql import func
 
 class CompanySettings(Base):

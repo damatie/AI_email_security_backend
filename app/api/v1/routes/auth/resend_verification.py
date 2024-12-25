@@ -1,20 +1,20 @@
-# app/api/v1/routes/auth/resend_verification.py
-
 from fastapi import APIRouter, HTTPException, Depends, status
 from sqlalchemy.orm import Session
 from app.models import User
 from app.db.deps import get_db
-from app.services.email_service import EmailService
+from app.services.email_services.email_sending_service import EmailSendingService
 from app.core.security import create_verification_token
-from app.utils.enums import  UserStatusEnum
+from app.utils.enums import UserStatusEnum
+from app.utils.response_helper import create_response
 import logging
 
 resend_verification_router = APIRouter()
 logger = logging.getLogger(__name__)
 
+
 @resend_verification_router.post("/resend-verification", status_code=status.HTTP_200_OK)
 async def resend_verification_email(
-    email: str, db: Session = Depends(get_db), email_service: EmailService = Depends()
+    email: str, db: Session = Depends(get_db), email_service: EmailSendingService = Depends()
 ):
     """
     Resend the email verification link to the user.
@@ -24,16 +24,18 @@ async def resend_verification_email(
         user = db.query(User).filter(User.email == email).first()
         if not user:
             logger.warning(f"Resend verification: User not found for email {email}")
-            raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND,
-                detail="User not found.",
+            return create_response(
+                status="error",
+                msg="User not found.",
+                data=None,
             )
 
         if user.status == UserStatusEnum.ACTIVE:
             logger.info(f"Resend verification: Email {email} is already verified.")
-            raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
-                detail="Email is already verified.",
+            return create_response(
+                status="error",
+                msg="Email is already verified.",
+                data=None,
             )
 
         # Generate a new verification token
@@ -47,12 +49,17 @@ async def resend_verification_email(
             logger.info(f"Resend verification: Email sent successfully to {email}")
         except Exception as e:
             logger.error(f"Failed to send verification email to {email}: {str(e)}")
-            raise HTTPException(
-                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-                detail="Failed to send verification email. Please try again later.",
+            return create_response(
+                status="error",
+                msg="Failed to send verification email. Please try again later.",
+                data=None,
             )
 
-        return {"message": "Verification email resent successfully."}
+        return create_response(
+            status="success",
+            msg="Verification email resent successfully.",
+            data={"email": email},
+        )
 
     except HTTPException:
         # Re-raise known HTTP exceptions
@@ -60,7 +67,8 @@ async def resend_verification_email(
     except Exception as e:
         # Log unexpected errors
         logger.exception(f"Unexpected error during resend verification for {email}: {str(e)}")
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="An unexpected error occurred. Please try again later.",
+        return create_response(
+            status="error",
+            msg="An unexpected error occurred. Please try again later.",
+            data=None,
         )

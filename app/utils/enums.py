@@ -63,3 +63,11 @@ class ThreatSeverityEnum(str, Enum):
     MEDIUM = "MEDIUM"
     LOW = "LOW"
     NONE = "NONE"
+
+class ProductNameEnum(str, Enum):
+    EMAIL_SECURITY_SUITE="Email Security Suite"
+
+class ServiceStatusEnum(str, Enum):
+    UNAVAILABLE = "UNAVAILABLE"
+    COMING_SOON = "COMING_SOON"
+    AVAILABLE = "AVAILABLE"

@@ -2,8 +2,8 @@
 from sqlalchemy import Column, Integer, String, DateTime, JSON, Enum
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
-from .base import Base
-from ..utils.enums import RoleEnum
+from ..base import Base
+from ...utils.enums import RoleEnum
 
 class Role(Base):
     __tablename__ = 'roles'

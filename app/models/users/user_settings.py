@@ -1,7 +1,7 @@
-# app/models/user_settings.py
+# app/models/users/user_settings.py
 from sqlalchemy import Column, Integer, Boolean, ForeignKey, JSON, DateTime
 from sqlalchemy.orm import relationship
-from .base import Base
+from ..base import Base
 from sqlalchemy.sql import func
 
 class UserSettings(Base):

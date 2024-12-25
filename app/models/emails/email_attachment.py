@@ -1,7 +1,7 @@
-# app/models/email_attachment.py
+# app/models/emails/email_attachment.py
 from sqlalchemy import Column, Integer, String, ForeignKey, DateTime
 from sqlalchemy.orm import relationship
-from .base import Base
+from ..base import Base
 from sqlalchemy.sql import func
 
 class EmailAttachment(Base):

@@ -6,7 +6,7 @@ from app.core.config import settings
 import logging
 
 
-class EmailService:
+class EmailSendingService:
     def __init__(self):
         self.from_email = settings.FROM_EMAIL
         self.smtp_server = settings.SMTP_SERVER

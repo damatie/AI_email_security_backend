@@ -1,7 +1,7 @@
 # models/two_factor_auth.py
 from sqlalchemy import Column, Integer, String, Boolean, ForeignKey, DateTime
 from sqlalchemy.orm import relationship
-from .base import Base
+from ..base import Base
 from sqlalchemy.sql import func
 
 

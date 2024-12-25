@@ -5,20 +5,20 @@ from sqlalchemy.orm import Session
 from app.db.deps import get_db
 from app.models import User, TwoFactorAuth
 from app.core.config import settings
-from app.models.email_integrations import EmailIntegration
+from app.models.emails.email_integrations import EmailIntegration
 from app.schemas.auth.individual_user.onboarding import (
     OnboardingSchema,
     OnboardingResponseSchema,
     TwoFASetupSchema,
 )
 from app.utils.get_current_user import get_current_user
-from app.services.email_service import EmailService
+from app.services.email_services.email_sending_service import EmailSendingService
 import pyotp
 import logging
 
 # Initialize router and email service
 onboarding_router = APIRouter()
-email_service = EmailService()
+email_service = EmailSendingService()
 
 # Configure logger
 logger = logging.getLogger(__name__)

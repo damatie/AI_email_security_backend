@@ -1,8 +1,8 @@
-# app/models/company.py
+# app/models/companies/company.py
 from sqlalchemy import Column, Integer, String, DateTime, Enum, JSON, Boolean
 from sqlalchemy.orm import relationship
-from .base import Base
-from ..utils.enums import EmailProviderEnum
+from ..base import Base
+from ...utils.enums import EmailProviderEnum
 from sqlalchemy.sql import func
 
 class Company(Base):

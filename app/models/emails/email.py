@@ -1,7 +1,7 @@
-# app/models/email.py
+# app/models/emails/email.py
 from sqlalchemy import Column, Integer, String, Boolean, ForeignKey, DateTime, Text, JSON
 from sqlalchemy.orm import relationship
-from .base import Base
+from ..base import Base
 from sqlalchemy.sql import func
 
 class Email(Base):
