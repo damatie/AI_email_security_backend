@@ -63,7 +63,12 @@ class Settings(BaseSettings):
     SMTP_PORT: int 
     FROM_EMAIL: str 
 
+    #Encryption settings
+    ENCRYPTION_KEY: str
 
+    #Paths settings
+    GMAIL_CLIENT_SECRET_PATH: str
+    GMAIL_REDIRECT_URI: str
     
     # API Documentation settings
     DOCS_URL: Optional[str] = "/api/docs"

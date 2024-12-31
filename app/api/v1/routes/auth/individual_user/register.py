@@ -3,7 +3,7 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from app.db.deps import get_db
-from app.schemas.auth.individual_user.register import RegisterNewUserSchema, RegisterNewUserResponseSchema
+from app.schemas.auth.individual_user.register_schema import RegisterNewUserSchema, RegisterNewUserResponseSchema
 from app.models import User, Role
 from app.core.security import get_password_hash
 from app.utils.enums import RoleEnum, UserStatusEnum, UserTypeEnum

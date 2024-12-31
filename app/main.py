@@ -37,7 +37,7 @@ async def root():
         "version": settings.VERSION
     }
 
-@app.get("/redis-health")
+@app.get("/api/redis-health")
 async def redis_health():
     try:
         redis_client.ping()

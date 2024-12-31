@@ -4,7 +4,7 @@ from fastapi.responses import JSONResponse
 from sqlalchemy.orm import Session
 from app.db.deps import get_db
 from app.models import User, TwoFactorAuth
-from app.schemas.auth.login import LoginSchema, LoginResponseSchema
+from app.schemas.auth.login_schema import LoginSchema, LoginResponseSchema
 from app.core.security import verify_password, create_access_token
 from app.services.email_services.email_sending_service import EmailSendingService
 from app.utils.enums import UserStatusEnum

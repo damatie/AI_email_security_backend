@@ -12,7 +12,7 @@ resend_verification_router = APIRouter()
 logger = logging.getLogger(__name__)
 
 
-@resend_verification_router.post("/resend-verification", status_code=status.HTTP_200_OK)
+@resend_verification_router.post("/", status_code=status.HTTP_200_OK)
 async def resend_verification_email(
     email: str, db: Session = Depends(get_db), email_service: EmailSendingService = Depends()
 ):

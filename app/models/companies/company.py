@@ -19,6 +19,7 @@ class Company(Base):
 
     # Relationships
     users = relationship("User", back_populates="company")
+    email_integrations = relationship("EmailIntegration", back_populates="company")
     company_settings = relationship("CompanySettings", back_populates="company", uselist=False)
 
     def __repr__(self):

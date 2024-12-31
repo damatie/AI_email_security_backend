@@ -2,7 +2,7 @@ from fastapi import APIRouter, HTTPException, Depends, status, Cookie, Query
 from sqlalchemy.orm import Session
 from app.db.deps import get_db
 from app.models import User, TwoFactorAuth
-from app.schemas.auth.login import LoginResponseSchema
+from app.schemas.auth.login_schema import LoginResponseSchema
 from app.core.security import create_access_token
 from app.core.config import settings
 from app.core.redis import redis_client
