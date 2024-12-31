@@ -2,7 +2,7 @@ from fastapi import APIRouter, HTTPException, status, Depends
 from sqlalchemy.orm import Session
 from app.db.deps import get_db
 from app.models.emails.email_provider import EmailProvider
-from app.schemas.email.email_provider import (
+from app.schemas.email.email_provider_schema import (
     EmailProviderCreateSchema,
     EmailProviderUpdateSchema,
     EmailProviderGetResponseSchema,

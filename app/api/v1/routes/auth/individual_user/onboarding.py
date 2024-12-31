@@ -6,7 +6,7 @@ from app.db.deps import get_db
 from app.models import User, TwoFactorAuth
 from app.core.config import settings
 from app.models.emails.email_integrations import EmailIntegration
-from app.schemas.auth.individual_user.onboarding import (
+from app.schemas.auth.individual_user.onboarding_schema import (
     OnboardingSchema,
     OnboardingResponseSchema,
     TwoFASetupSchema,

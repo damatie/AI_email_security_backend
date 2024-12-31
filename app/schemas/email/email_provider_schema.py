@@ -1,3 +1,5 @@
+# app/schemas/email/email_provider_schema.py
+
 from pydantic import BaseModel, Field, field_validator
 from typing import Optional, List, Union
 from datetime import datetime

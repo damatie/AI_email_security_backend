@@ -10,7 +10,7 @@ from app.utils.response_helper import create_response
 
 verify_email_router = APIRouter()
 
-@verify_email_router.get("/verify_email/{token}", status_code=status.HTTP_200_OK)
+@verify_email_router.get("/{token}", status_code=status.HTTP_200_OK)
 async def verify_email(token: str, db: Session = Depends(get_db)):
     """
     Verify the user's email address using the token.
