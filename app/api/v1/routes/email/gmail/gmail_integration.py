@@ -1,14 +1,15 @@
-from fastapi import APIRouter, HTTPException, status, Depends, Request
+from fastapi import APIRouter, HTTPException, status, Depends, Request, BackgroundTasks
 from sqlalchemy.orm import Session
 from app.db.deps import get_db
-from app.schemas.email.email_integration_schema import (
-    GmailAuthUrlResponseSchema,
+from app.schemas.email.email_integration_schema import GmailAuthUrlResponseSchema
+from app.services.email_services.gmail_service.connect_gmail_service import (
+    generate_gmail_auth_url, 
+    fetch_gmail_token
 )
-from app.services.email_services.gmail_service.connect_gmail_service import generate_gmail_auth_url, fetch_gmail_token
+from app.services.email_services.gmail_service.fetch_email_service import check_for_new_emails_task
 from app.utils.response_helper import create_response
 from app.utils.get_current_user import get_current_user
 import logging
-
 
 # Initialize router
 gmail_integrations_router = APIRouter()
@@ -39,24 +40,38 @@ async def get_gmail_auth_url(
 
 
 @gmail_integrations_router.get("/token")
-async def gmail_token( request: Request,
+async def gmail_callback(
+    request: Request,
+    background_tasks: BackgroundTasks,
     db: Session = Depends(get_db),
-    current_user=Depends(get_current_user), ):
-    """
-    Handle the Gmail OAuth2 callback and store tokens.
-    """
+    current_user=Depends(get_current_user),
+):
     try:
-        # Extract the authorization code from the request
+        logger.info("Token endpoint called")
         auth_code = request.query_params.get("code")
         if not auth_code:
             raise HTTPException(status_code=400, detail="Authorization code not found.")
+        
+        logger.info(f"Current user: id={current_user.id}, email={current_user.email}")
 
-        # Fetch the token using the auth code
         integration = fetch_gmail_token(auth_code, db, user_id=current_user.id)
+
+        logger.info("Scheduling initial scan background task")
+        background_tasks.add_task(check_for_new_emails_task, user_id=current_user.id, email_address=current_user.email)
+
+        response_data = {
+            "id": integration.id,
+            "user_id": integration.user_id,
+            "provider_name": integration.provider_name,
+            "is_connected": integration.is_connected,
+            "created_at": integration.created_at.isoformat(),
+            "updated_at": integration.updated_at.isoformat() if integration.updated_at else None,
+        }
+
         return create_response(
             status="success",
-            msg="Gmail connected successfully.",
-            data=integration,
+            msg="Gmail connected successfully. Initial scan started.",
+            data=response_data,
         )
     except Exception as e:
         logger.error(f"Error completing Gmail integration: {e}")
@@ -64,5 +79,3 @@ async def gmail_token( request: Request,
             status_code=500,
             detail=f"Failed to complete Gmail integration: {e}",
         )
-
-

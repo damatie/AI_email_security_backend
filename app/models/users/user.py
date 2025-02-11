@@ -30,6 +30,7 @@ class User(Base):
     role = relationship("Role", back_populates="users")
     emails = relationship("Email", back_populates="user")
     email_integrations = relationship("EmailIntegration", back_populates="user", cascade="all, delete-orphan")
+    fetch_email_logs = relationship("FetchEmailLog", back_populates="user")
     two_factor_auth = relationship("TwoFactorAuth", back_populates="user", uselist=False)
     notifications = relationship("UserNotification", back_populates="user")
     settings = relationship("UserSettings", back_populates="user", uselist=False)

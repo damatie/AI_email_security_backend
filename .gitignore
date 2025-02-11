@@ -1,5 +1,6 @@
 # .gitignore
-
+  .gitignore
+  
 # Python
 __pycache__/
 *.py[cod]
@@ -30,6 +31,10 @@ conda-env/
 
 #Scripts
 generate_key.py
+generate_encryption_key.py
+
+#Gmail
+client_secret.json
 
 # Docker
 docker-compose.override.yml

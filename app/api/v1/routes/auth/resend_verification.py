@@ -2,7 +2,7 @@ from fastapi import APIRouter, HTTPException, Depends, status
 from sqlalchemy.orm import Session
 from app.models import User
 from app.db.deps import get_db
-from app.services.email_services.email_sending_service import EmailSendingService
+from app.services.email_services.send_email_notifications.email_sending_service import EmailSendingService
 from app.core.security import create_verification_token
 from app.utils.enums import UserStatusEnum
 from app.utils.response_helper import create_response

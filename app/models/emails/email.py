@@ -1,30 +1,32 @@
 # app/models/emails/email.py
-from sqlalchemy import Column, Integer, String, Boolean, ForeignKey, DateTime, Text, JSON
+from sqlalchemy import Column, Integer, String, ForeignKey, DateTime, UniqueConstraint
 from sqlalchemy.orm import relationship
-from ..base import Base
+from app.models.base import Base
 from sqlalchemy.sql import func
 
 class Email(Base):
     __tablename__ = 'emails'
 
     id = Column(Integer, primary_key=True)
-    user_id = Column(Integer, ForeignKey('users.id'), nullable=False)
-    email_id = Column(String, unique=True, nullable=False)  # Original email ID from provider
+    user_id = Column(Integer, ForeignKey('users.id'), nullable=False)  # Links to the user
+    email_id = Column(String, unique=True, nullable=False)  # Unique email ID from the provider
     subject = Column(String, nullable=False)
     sender = Column(String, nullable=False)
     recipient = Column(String, nullable=False)
-    content = Column(Text, nullable=False)
-    html_content = Column(Text, nullable=True)
-    received_at = Column(DateTime(timezone=True), nullable=False)
-    processed_at = Column(DateTime(timezone=True), nullable=True)
-    is_processed = Column(Boolean, default=False)
-    email_metadata = Column(JSON, nullable=True)  
-    created_at = Column(DateTime(timezone=True), server_default=func.now())
+    received_at = Column(DateTime(timezone=True), nullable=False)  # Timestamp when the email was received
+    processed_at = Column(DateTime(timezone=True), nullable=True)  # Timestamp when processing completed
+    created_at = Column(DateTime(timezone=True), server_default=func.now())  # Auto-generated timestamp
 
     # Relationships
     user = relationship("User", back_populates="emails")
-    attachments = relationship("EmailAttachment", back_populates="email")
-    phishing_analysis = relationship("PhishingAnalysis", back_populates="email", uselist=False)
+    threat_analysis = relationship("ThreatAnalysis", back_populates="email", uselist=False)
+    remediation_logs = relationship("RemediationLog", back_populates="email")
+    analysis_highlights = relationship("EmailAnalysisHighlights", back_populates="email")
+
+    __table_args__ = (
+        UniqueConstraint('email_id', name='uq_email_id'),
+    )
 
     def __repr__(self):
-        return f"<Email(id={self.id}, subject={self.subject}, user_id={self.user_id})>"
+        return f"<Email(id={self.id}, email_id={self.email_id}, subject={self.subject})>"
+
