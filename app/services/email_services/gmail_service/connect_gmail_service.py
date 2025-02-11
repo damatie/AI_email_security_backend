@@ -1,3 +1,4 @@
+#app/services/email_services/gmail_service/connect_gmail_service.py
 import json
 import logging
 from sqlalchemy.orm import Session
@@ -7,12 +8,13 @@ from google.auth.transport.requests import Request
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 from app.models.emails.email_integrations import EmailIntegration
+from app.models.emails.fetch_email_log import FetchEmailLog 
 from app.core.config import settings
 from sqlalchemy.sql import func
 from app.utils.enums import EmailProviderEnum
 
 # Define the Gmail scopes
-SCOPES = ['https://www.googleapis.com/auth/gmail.readonly']
+SCOPES = settings.GMAIL_SCOPES
 
 logger = logging.getLogger(__name__)
 
@@ -51,6 +53,7 @@ def fetch_gmail_token(auth_code: str, db: Session, user_id: int = None, company_
         EmailIntegration: The created or updated email integration entry.
     """
     try:
+        # Initialize OAuth flow
         flow = InstalledAppFlow.from_client_secrets_file(
             settings.GMAIL_CLIENT_SECRET_PATH,
             SCOPES,
@@ -59,6 +62,7 @@ def fetch_gmail_token(auth_code: str, db: Session, user_id: int = None, company_
         flow.fetch_token(code=auth_code)
         credentials = flow.credentials
 
+        # Prepare token data
         token_data = {
             "token": credentials.token,
             "refresh_token": credentials.refresh_token,
@@ -68,6 +72,7 @@ def fetch_gmail_token(auth_code: str, db: Session, user_id: int = None, company_
             "scopes": credentials.scopes,
         }
 
+        # Store or update integration in the database
         integration = db.query(EmailIntegration).filter(
             EmailIntegration.user_id == user_id if user_id else EmailIntegration.company_id == company_id,
             EmailIntegration.provider_name == EmailProviderEnum.GMAIL
@@ -90,10 +95,67 @@ def fetch_gmail_token(auth_code: str, db: Session, user_id: int = None, company_
         db.commit()
         db.refresh(integration)
 
+        # Set up Gmail notifications
+        setup_gmail_watch(credentials, user_id=user_id, db=db)
+
+        # Save initial historyId
+        save_initial_history_id(credentials, user_id=user_id, db=db)
+
         logger.info(f"Gmail connected successfully for {'user' if user_id else 'company'}.")
         return integration
     except Exception as e:
         logger.error(f"Failed to connect Gmail: {e}")
+        raise
+
+
+
+def setup_gmail_watch(credentials: Credentials, user_id: int, db: Session):
+    """
+    Set up Gmail push notifications for a user's account.
+
+    Args:
+        credentials: Google OAuth2 credentials.
+        user_id: ID of the user.
+        db: Database session.
+    """
+    try:
+        service = build('gmail', 'v1', credentials=credentials)
+        body = {
+            'topicName': settings.GMAIL_PUBSUB_TOPIC,
+            'labelIds': ['INBOX'],  # Only watch the INBOX
+        }
+        watch_response = service.users().watch(userId='me', body=body).execute()
+        logger.info(f"Gmail watch setup for user {user_id}: {watch_response}")
+    except Exception as e:
+        logger.error(f"Error setting up Gmail watch for user {user_id}: {e}")
+        raise
+
+
+def save_initial_history_id(credentials: Credentials, user_id: int, db: Session):
+    """
+    Save the initial historyId for a user's Gmail account.
+
+    Args:
+        credentials: Google OAuth2 credentials.
+        user_id: ID of the user.
+        db: Database session.
+    """
+    try:
+        service = build('gmail', 'v1', credentials=credentials)
+        profile = service.users().getProfile(userId='me').execute()
+        history_id = profile.get('historyId')
+
+        if history_id:
+            fetch_log = db.query(FetchEmailLog).filter(FetchEmailLog.user_id == user_id).first()
+            if fetch_log:
+                fetch_log.history_id = history_id
+            else:
+                fetch_log = FetchEmailLog(user_id=user_id, history_id=history_id)
+                db.add(fetch_log)
+            db.commit()
+            logger.info(f"Initial historyId {history_id} stored for user {user_id}.")
+    except Exception as e:
+        logger.error(f"Error saving initial historyId for user {user_id}: {e}")
         raise
 
 

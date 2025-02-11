@@ -7,12 +7,13 @@ from .auth.two_factor_auth import TwoFactorAuth
 from .companies.company import Company
 from .companies.company_settings import CompanySettings
 from .emails.email import Email
-from .emails.email_attachment import EmailAttachment
-from .email_analysis.phishing_analysis import PhishingAnalysis
-from .email_analysis.email_attachment_threat_analysis import AttachmentThreatAnalysis
+from .email_analysis.threat_analysis import ThreatAnalysis
 from .users.user_notification import UserNotification
 from .emails.email_integrations import EmailIntegration
 from .emails.email_provider import EmailProvider
+from .emails.fetch_email_log import FetchEmailLog
+from .email_analysis.email_analysis_highlights import EmailAnalysisHighlights
+from .email_analysis.RemediationLog import RemediationLog
 
 __all__ = [
     'Base',
@@ -23,10 +24,11 @@ __all__ = [
     'Company',
     'CompanySettings',
     'Email',
-    'EmailAttachment',
-    'PhishingAnalysis',
-    'AttachmentThreatAnalysis',
+    'ThreatAnalysis',
+    'EmailAnalysisHighlights',
+    'RemediationLog',
     'UserNotification',
     'EmailIntegration',
-    'EmailProvider'
+    'EmailProvider',
+    'FetchEmailLog'
 ]

@@ -49,7 +49,8 @@ class EmailSendingService:
         """
         Sends an email verification link to the user's email address.
         """
-        verification_link = f"http://127.0.0.1:8000/auth/verify_email/{token}"
+        verification_link = f"http://127.0.0.1:8000/api/v1/auth/email/verify/{token}"
+
         subject = "Verify Your Email Address"
 
         html_body = f"""
@@ -57,7 +58,7 @@ class EmailSendingService:
         <body>
             <p>Hi,</p>
             <p>Please click the following link to verify your email address:</p>
-            <a href="{verification_link}">Verify Email Address</a>
+            <a href={verification_link}>Verify Email Address</a>
             <p>If you did not create this account, please ignore this email.</p>
             <p>Regards,<br>Your App Team</p>
         </body>

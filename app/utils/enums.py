@@ -53,16 +53,28 @@ class ThreatTypeEnum(str, Enum):
     PHISHING = "PHISHING"
     SPAM = "SPAM"
     MALWARE = "MALWARE"
+    MALICIOUS = "MALICIOUS"
     SUSPICIOUS = "SUSPICIOUS"
-    CLEAN = "CLEAN"
+    SAFE = "SAFE"
     BEC = "BEC"
     IMPERSONATION = "IMPERSONATION"
 
 class ThreatSeverityEnum(str, Enum):
     HIGH = "HIGH"
+    MEDIUM_HIGH= "MEDIUM-HIGH"
     MEDIUM = "MEDIUM"
+    MEDIUM_LOW = "MEDIUM-LOW"
     LOW = "LOW"
     NONE = "NONE"
+class ConfidenceLevelEnum(str, Enum):
+    HIGH = "HIGH"
+    MEDIUM = "MEDIUM"
+    LOW = "LOW"
+
+class RiskLevelEnum(str, Enum):
+    HIGH_RISK = "HIGH RISK"
+    MEDIUM_RISK = "MEDIUM RISK"
+    LOW_RISK = "LOW RISK"
 
 class ProductNameEnum(str, Enum):
     EMAIL_SECURITY_SUITE="Email Security Suite"

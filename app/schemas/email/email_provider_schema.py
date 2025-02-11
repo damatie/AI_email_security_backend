@@ -26,12 +26,12 @@ class EmailProviderBaseSchema(BaseModel):
         return sanitized_value
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 
 class EmailProviderCreateSchema(EmailProviderBaseSchema):
     class Config:
-        orm_mode = True
+        from_attributes = True
         json_schema_extra = {
             "example": {
                 "name": "GMAIL",
@@ -46,7 +46,7 @@ class EmailProviderUpdateSchema(BaseModel):
     service_up: Optional[bool]
 
     class Config:
-        orm_mode = True
+        from_attributes = True
         json_schema_extra = {
             "example": {
                 "service_status": "COMING_SOON",
@@ -61,7 +61,7 @@ class EmailProviderResponseDataSchema(EmailProviderBaseSchema):
     updated_at: Optional[datetime]
 
     class Config:
-        orm_mode = True
+        from_attributes = True
         json_schema_extra = {
             "example": {
                 "id": 1,
