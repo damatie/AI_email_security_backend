@@ -18,12 +18,17 @@ class Settings(BaseSettings):
     RELOAD: bool = False  # Set to True for development
 
     # Redis configuration
-    REDIS_HOST: str = "redis"
+    REDIS_HOST: str = "localhost" # change to redis if you are to use docker
     REDIS_PORT: int =  6379
     REDIS_DB: int =  0
     REDIS_PASSWORD: str =None
 
-    
+    # Model
+    MODEL_NAME: str
+    MODEL_CACHE_DIR: str
+    VIRUSTOTAL_API_KEY: str
+    MODEL_VERSION:str = "roberta-base_v1.0"
+
     # Security settings
     SECRET_KEY: str = secrets.token_urlsafe(32)
     ALLOWED_HOSTS: List[str] = ["*"]
@@ -39,12 +44,14 @@ class Settings(BaseSettings):
     # Database settings
     POSTGRES_USER: str
     POSTGRES_PASSWORD: str
-    POSTGRES_SERVER: str ="db"
+    POSTGRES_SERVER: str ="localhost" # change to db if you are to use docker
     POSTGRES_PORT: str
     POSTGRES_DB: str
-    DATABASE_POOL_SIZE: int = 5
+    DATABASE_POOL_SIZE: int = 50
     DATABASE_POOL_RECYCLE: int = 3600
     DATABASE_SSL_MODE: bool = False
+    DATABASE_MAX_OVERFLOW: int = 60
+    DATABASE_POOL_TIMEOUT: int
     
     # JWT settings
     JWT_SECRET_KEY: str
@@ -66,9 +73,13 @@ class Settings(BaseSettings):
     #Encryption settings
     ENCRYPTION_KEY: str
 
-    #Paths settings
+    #Gmail settings
+    GMAIL_HOST:str
+    GMAIL_V: str ="v1"
     GMAIL_CLIENT_SECRET_PATH: str
     GMAIL_REDIRECT_URI: str
+    GMAIL_SCOPES: List[str] = ["https://www.googleapis.com/auth/gmail.modify"]
+    GMAIL_PUBSUB_TOPIC:str ="projects/capable-boulder-433420-m2/topics/gmail-notifications"
     
     # API Documentation settings
     DOCS_URL: Optional[str] = "/api/docs"
