@@ -13,6 +13,10 @@ venv/
 pip-log.txt
 pip-delete-this-directory.txt
 
+
+# AI models
+AI_models/
+
 # Conda
 conda-env/
 
