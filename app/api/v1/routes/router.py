@@ -1,7 +1,7 @@
 # Main Router - app/api/v1/router.py
 from fastapi import APIRouter
 from app.api.v1.routes.auth import register_individual_user_router,register_company_router,verify_email_router, resend_verification_router,login_router,login_2fa_router,individual_user_onboarding_router
-from app.api.v1.routes.email import email_providers_router,email_integrations_router,gmail_integrations_router
+from app.api.v1.routes.email import email_providers_router,email_integrations_router,gmail_integrations_router,gmail_notifications_router
 router = APIRouter()
 
 # Auth routes
@@ -48,6 +48,12 @@ router.include_router(
 router.include_router(
     gmail_integrations_router,
     prefix="/email/integration/gmail",
+    tags=["Gmail Integration"]
+)
+
+router.include_router(
+    gmail_notifications_router,
+    prefix="/email/gmail",
     tags=["Gmail Integration"]
 )
 

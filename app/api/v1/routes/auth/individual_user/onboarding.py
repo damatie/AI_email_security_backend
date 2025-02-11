@@ -12,7 +12,7 @@ from app.schemas.auth.individual_user.onboarding_schema import (
     TwoFASetupSchema,
 )
 from app.utils.get_current_user import get_current_user
-from app.services.email_services.email_sending_service import EmailSendingService
+from app.services.email_services.send_email_notifications.email_sending_service import EmailSendingService
 import pyotp
 import logging
 
@@ -138,7 +138,7 @@ async def verify_two_factor_authentication(
     # Verify OTP
     totp = pyotp.TOTP(two_fa.secret_key)
     expected_otp = totp.now()
-    print(f"Expected OTP: {expected_otp}, User entered OTP: {data.otp}")
+    logger.info(f"Expected OTP: {expected_otp}, User entered OTP: {data.otp}")
     
     if totp.verify(data.otp, valid_window=settings.VALID_WINDOW): # 20 intervals (10 minutes total)
         logger.info(f"2FA OTP verified for user {current_user.email}")

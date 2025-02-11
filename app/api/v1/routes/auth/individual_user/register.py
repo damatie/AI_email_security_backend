@@ -7,7 +7,7 @@ from app.schemas.auth.individual_user.register_schema import RegisterNewUserSche
 from app.models import User, Role
 from app.core.security import get_password_hash
 from app.utils.enums import RoleEnum, UserStatusEnum, UserTypeEnum
-from app.services.email_services.email_sending_service import EmailSendingService
+from app.services.email_services.send_email_notifications.email_sending_service import EmailSendingService
 from app.core.security import create_verification_token
 from app.utils.response_helper import create_response
 import logging
@@ -47,7 +47,7 @@ async def user_register(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
                 detail=create_response(
                     status="error",
-                    msg="Role configuration error. Please contact support.",
+                    msg="Something went wrong. Please contact support.",
                     data=None,
                 ),
             )
