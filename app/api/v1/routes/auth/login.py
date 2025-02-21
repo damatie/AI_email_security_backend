@@ -32,7 +32,7 @@ async def login(
     """
     Log in a user with email and password. Handle 2FA states.
     """
-    email = login_data.email.lower()  # Normalize email
+    email = login_data.email.lower()  #Normalize email
 
     # Find user by email
     user = db.query(User).filter(User.email == email).first()
