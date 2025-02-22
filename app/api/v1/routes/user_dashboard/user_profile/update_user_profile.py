@@ -2,7 +2,8 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from app.db.deps import get_db
-from app.schemas.user_dashboard.user_profile.update_user_profile import UpdateUserProfileResponseSchema, UserProfileUpdateSchema
+from app.schemas.user_dashboard.user_profile.update_user_profile_schema import UpdateUserProfileResponseSchema, UpdateUserProfileSchema
+from app.utils.error_handlers.error_response_schema import ValidationErrorResponseSchema
 from app.utils.response_helper import create_response
 from app.utils.get_current_user import get_current_user
 import logging
@@ -10,9 +11,18 @@ import logging
 update_user_profile_router = APIRouter()
 logger = logging.getLogger(__name__)
 
-@update_user_profile_router.put("/profile", response_model=UpdateUserProfileResponseSchema)
+@update_user_profile_router.put(
+        "/profile",
+        response_model=UpdateUserProfileResponseSchema,
+        responses={
+            422: {
+                "model": ValidationErrorResponseSchema,
+                "description": "Validation error - the input data did not pass the validation checks.",
+            }
+        }
+        )
 async def update_user_profile(
-    payload: UserProfileUpdateSchema,
+    payload: UpdateUserProfileSchema,
     db: Session = Depends(get_db),
     current_user = Depends(get_current_user)
 ):

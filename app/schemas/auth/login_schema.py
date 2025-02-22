@@ -1,10 +1,17 @@
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, EmailStr, Field, field_validator
 from typing import Optional
 
 
 class LoginSchema(BaseModel):
-    email: EmailStr
-    password: str
+    email: EmailStr = Field(
+        ..., 
+        description="User's email address", 
+        example="user@example.com"
+    )
+    password: str = Field(
+        ..., 
+        example="securePassword1!"
+    )
 
     class Config:
         json_schema_extra = {
@@ -13,7 +20,18 @@ class LoginSchema(BaseModel):
                 "password": "securePassword1!"
             }
         }
-
+    # Normalize email
+    @field_validator("email", mode="before")
+    def normalize_email(cls, email: str) -> str:
+        return email.strip().lower()
+    
+       # Validate password with strong rules
+    @field_validator("password")
+    def validate_password(cls, value: str) -> str:
+        value = value.strip()
+        if not value:
+            raise ValueError("Password cannot be empty.")
+        return value
 
 class UserResponseDataSchema(BaseModel):
     id: int

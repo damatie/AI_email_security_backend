@@ -1,8 +1,7 @@
 # Email Detail Endpoint
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from sqlalchemy import func
-from app.api.v1.routes.user_dashboard.scanned_emails.email_details_schema import EmailDetailResponseSchema
+from app.schemas.user_dashboard.scanned_emails.email_details_schema import EmailDetailResponseSchema
 from app.db.deps import get_db
 from app.utils.get_current_user import get_current_user
 from app.utils.response_helper import create_response
@@ -17,8 +16,8 @@ logger = logging.getLogger(__name__)
 
 @get_email_details_router.get(
         "/email/{email_id}", 
-        response_model=EmailDetailResponseSchema,
-        description= "Get details and analysis for scanned email" )
+        response_model=EmailDetailResponseSchema
+          )
 async def email_details(
     email_id: str,
     db: Session = Depends(get_db),

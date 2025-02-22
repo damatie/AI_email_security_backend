@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from app.db.deps import get_db
+from app.utils.error_handlers.error_response_schema import ValidationErrorResponseSchema
 from app.utils.get_current_user import get_current_user
 from app.utils.response_helper import create_response
 from app.models.emails.email import Email
@@ -14,7 +15,16 @@ from datetime import datetime, timezone
 email_reclassification_router = APIRouter()
 logger = logging.getLogger(__name__)
 
-@email_reclassification_router.put("/email/{email_id}/reclassify", response_model=ReclassificationResponseSchema)
+@email_reclassification_router.put(
+        "/email/{email_id}/reclassify", 
+        response_model=ReclassificationResponseSchema,
+        responses={
+            422: {
+                "model": ValidationErrorResponseSchema,
+                "description": "Validation error - the input data did not pass the validation checks.",
+            }
+        }
+        )
 async def reclassify_email(
     email_id: str,
     payload: ReclassificationRequestSchema,

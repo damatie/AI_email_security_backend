@@ -3,7 +3,7 @@ from typing import Optional
 from datetime import datetime
 
 # Request schema for updating the user profile.
-class UserProfileUpdateSchema(BaseModel):
+class UpdateUserProfileSchema(BaseModel):
     first_name: Optional[str] = Field(None, description="User's first name")
     last_name: Optional[str] = Field(None, description="User's last name")
     # Add additional fields here if needed.

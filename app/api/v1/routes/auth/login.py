@@ -10,6 +10,7 @@ from app.services.email_services.send_email_notifications.email_sending_service 
 from app.utils.enums import UserStatusEnum
 from app.core.config import settings
 from app.core.redis import redis_client
+from app.utils.error_handlers.error_response_schema import ValidationErrorResponseSchema
 from app.utils.response_helper import create_response
 import pyotp
 import logging
@@ -23,7 +24,19 @@ email_service = EmailSendingService()
 logger = logging.getLogger(__name__)
 
 
-@login_router.post("/", response_model=LoginResponseSchema, status_code=status.HTTP_200_OK)
+@login_router.post(
+        "/",
+        response_model=LoginResponseSchema, 
+        status_code=status.HTTP_200_OK,
+        responses={
+            422: {
+                "model": ValidationErrorResponseSchema,
+                "description": "Validation error - the input data did not pass the validation checks.",
+            }
+        }
+        
+        )
+
 async def login(
     request: Request,
     login_data: LoginSchema,

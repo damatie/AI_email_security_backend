@@ -2,7 +2,7 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from app.db.deps import get_db
-from app.schemas.user_dashboard.user_profile.get_user_profile import UserProfileResponseSchema
+from app.schemas.user_dashboard.user_profile.get_user_profile_schema import UserProfileResponseSchema
 from app.utils.response_helper import create_response
 from app.utils.get_current_user import get_current_user
 import logging
