@@ -64,7 +64,33 @@ ROLE_PERMISSIONS: Dict[RoleEnum, Dict[ResourceEnum, Set[PermissionEnum]]] = {
             PermissionEnum.LIST
         }
     },
-    RoleEnum.USER: {
+    RoleEnum.COMPANY_MANAGER: {
+        ResourceEnum.USERS: {
+            PermissionEnum.READ,
+            PermissionEnum.UPDATE,
+            PermissionEnum.LIST
+        },
+        ResourceEnum.EMAILS: {
+            PermissionEnum.READ,
+            PermissionEnum.LIST
+        },
+        ResourceEnum.THREAT_ANALYSIS: {
+            PermissionEnum.READ,
+            PermissionEnum.LIST
+        }
+    },
+    RoleEnum.COMPANY_ANALYST: {
+        ResourceEnum.THREAT_ANALYSIS: {
+            PermissionEnum.READ,
+            PermissionEnum.LIST,
+            PermissionEnum.UPDATE
+        },
+        ResourceEnum.EMAILS: {
+            PermissionEnum.READ,
+            PermissionEnum.LIST
+        }
+    },
+    RoleEnum.COMPANY_USER: {
         ResourceEnum.USERS: {
             PermissionEnum.READ,
             PermissionEnum.UPDATE
@@ -79,6 +105,33 @@ ROLE_PERMISSIONS: Dict[RoleEnum, Dict[ResourceEnum, Set[PermissionEnum]]] = {
         },
         ResourceEnum.THREAT_ANALYSIS: {
             PermissionEnum.READ
+        }
+    },
+    RoleEnum.SUPPORT_AGENT: {
+        ResourceEnum.USERS: {
+            PermissionEnum.READ,
+            PermissionEnum.LIST
+        },
+        ResourceEnum.EMAILS: {
+            PermissionEnum.READ,
+            PermissionEnum.LIST
+        },
+        ResourceEnum.THREAT_ANALYSIS: {
+            PermissionEnum.READ,
+            PermissionEnum.LIST
+        }
+    },
+    RoleEnum.INDIVIDUAL_USER: {
+        ResourceEnum.EMAILS: {
+            PermissionEnum.READ,
+            PermissionEnum.LIST
+        },
+        ResourceEnum.THREAT_ANALYSIS: {
+            PermissionEnum.READ
+        },
+        ResourceEnum.SETTINGS: {
+            PermissionEnum.READ,
+            PermissionEnum.UPDATE
         }
     }
 }

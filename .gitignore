@@ -1,5 +1,6 @@
 # .gitignore
-
+  .gitignore
+  
 # Python
 __pycache__/
 *.py[cod]
@@ -11,6 +12,10 @@ venv/
 .venv/
 pip-log.txt
 pip-delete-this-directory.txt
+
+
+# AI models
+AI_models/
 
 # Conda
 conda-env/
@@ -30,6 +35,10 @@ conda-env/
 
 #Scripts
 generate_key.py
+generate_encryption_key.py
+
+#Gmail
+client_secret.json
 
 # Docker
 docker-compose.override.yml

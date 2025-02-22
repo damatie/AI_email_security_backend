@@ -1,0 +1,26 @@
+# Ignore system files
+.DS_Store
+Thumbs.db
+
+
+# Ignore all hidden files (except .env)
+.*
+!.env
+
+# Ignore build and cache files
+__pycache__/
+*.pyc
+*.pyo
+*.log
+
+# Ignore virtual environments
+venv/
+env/
+
+# Ignore large unnecessary files
+node_modules/
+*.tar
+*.tar.gz
+*.zip
+*.rar
+AI_models/

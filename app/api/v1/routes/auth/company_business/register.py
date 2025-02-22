@@ -8,9 +8,9 @@ from app.models import User, Role
 from app.core.security import get_password_hash
 from app.utils.enums import RoleEnum, UserStatusEnum
 
-router = APIRouter()
+register_company_router = APIRouter()
 
-@router.post("/", response_model=RegisterNewCompanyResponse, status_code=status.HTTP_201_CREATED)
+@register_company_router.post("/", response_model=RegisterNewCompanyResponse, status_code=status.HTTP_201_CREATED)
 async def register_company(
     company_data: RegisterNewCompanyRequest,
     db: Session = Depends(get_db),

@@ -1,9 +1,10 @@
 # app/main.py
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from app.core.config import settings
 from app.api.v1.routes.router import router as api_v1_router
-from fastapi.routing import APIRoute
+from app.core.redis import redis_client
+from app.utils.exceptions import register_exception_handlers
 
 app = FastAPI(
     title=settings.PROJECT_NAME,
@@ -11,10 +12,11 @@ app = FastAPI(
     docs_url=settings.DOCS_URL,
     redoc_url=settings.REDOC_URL,
     openapi_url=settings.OPENAPI_URL,
-    debug=settings.DEBUG
+    # debug=settings.DEBUG
 )
 
-print (settings.DOCS_URL)
+# Register custom exception handlers
+register_exception_handlers(app)
 
 # Configure CORS
 app.add_middleware(
@@ -31,19 +33,20 @@ app.include_router(
     prefix=settings.API_V1_STR
 )
 
-@app.get("/")
+@app.get(f"{settings.API_V1_STR}")
 async def root():
     return {
         "message": f"Welcome to {settings.PROJECT_NAME} API",
         "version": settings.VERSION
     }
 
-
-# Log all registered routes
-for route in app.routes:
-    if isinstance(route, APIRoute):
-        print(f"Route: {route.path}, Name: {route.name}")
-
+@app.get(f"{settings.API_V1_STR}/redis-health")
+async def redis_health():
+    try:
+        redis_client.ping()
+        return {"status": "success", "message": "Connected to Redis"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Redis connection failed: {str(e)}")
 
         
 if __name__ == "__main__":

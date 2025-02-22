@@ -4,18 +4,31 @@ from typing import Optional, List
 from functools import lru_cache
 import secrets
 
+
 class Settings(BaseSettings):
     # Project settings
     PROJECT_NAME: str = "Email Security System"
-    VERSION: str = "1.0.0"
-    API_V1_STR: str = "/api/v1"
+    VERSION: str = "v1"
+    API_V1_STR: str = f"/api/{VERSION}"
     
     # Server settings
     HOST: str = "0.0.0.0"
     PORT: int = 8000
     WORKERS: int = 4
     RELOAD: bool = False  # Set to True for development
-    
+
+    # Redis configuration
+    REDIS_HOST: str = "localhost" # change to redis if you are to use docker
+    REDIS_PORT: int =  6379
+    REDIS_DB: int =  0
+    REDIS_PASSWORD: str =None
+
+    # Model
+    MODEL_NAME: str
+    MODEL_CACHE_DIR: str
+    VIRUSTOTAL_API_KEY: str
+    MODEL_VERSION:str = "roberta-base_v1.0"
+
     # Security settings
     SECRET_KEY: str = secrets.token_urlsafe(32)
     ALLOWED_HOSTS: List[str] = ["*"]
@@ -31,12 +44,14 @@ class Settings(BaseSettings):
     # Database settings
     POSTGRES_USER: str
     POSTGRES_PASSWORD: str
-    POSTGRES_SERVER: str
+    POSTGRES_SERVER: str ="localhost" # change to db if you are to use docker
     POSTGRES_PORT: str
     POSTGRES_DB: str
-    DATABASE_POOL_SIZE: int = 5
+    DATABASE_POOL_SIZE: int = 50
     DATABASE_POOL_RECYCLE: int = 3600
     DATABASE_SSL_MODE: bool = False
+    DATABASE_MAX_OVERFLOW: int = 60
+    DATABASE_POOL_TIMEOUT: int
     
     # JWT settings
     JWT_SECRET_KEY: str
@@ -44,6 +59,9 @@ class Settings(BaseSettings):
     ACCESS_TOKEN_EXPIRE_MINUTES: int 
     REFRESH_TOKEN_EXPIRE_DAYS: int 
     EMAIL_TOKEN_EXPIRE_MINUTES: int
+
+    # OTP settings
+    VALID_WINDOW: int
     
     # Email settings
     EMAIL_USERNAME: str 
@@ -52,12 +70,21 @@ class Settings(BaseSettings):
     SMTP_PORT: int 
     FROM_EMAIL: str 
 
+    #Encryption settings
+    ENCRYPTION_KEY: str
 
+    #Gmail settings
+    GMAIL_HOST:str
+    GMAIL_V: str ="v1"
+    GMAIL_CLIENT_SECRET_PATH: str
+    GMAIL_REDIRECT_URI: str
+    GMAIL_SCOPES: List[str] = ["https://www.googleapis.com/auth/gmail.modify"]
+    GMAIL_PUBSUB_TOPIC:str ="projects/capable-boulder-433420-m2/topics/gmail-notifications"
     
     # API Documentation settings
-    DOCS_URL: Optional[str] = "/api/docs"
-    REDOC_URL: Optional[str] = "/api/redoc"
-    OPENAPI_URL: Optional[str] = "/api/openapi.json"
+    DOCS_URL: Optional[str] = f"/api/{VERSION}/docs"
+    REDOC_URL: Optional[str] = f"/api/{VERSION}/redoc"
+    OPENAPI_URL: Optional[str] = f"/api/{VERSION}/openapi.json"
     
     # Rate Limiting settings
     RATE_LIMIT_PER_SECOND: int = 10

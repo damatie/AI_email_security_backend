@@ -5,11 +5,12 @@ from sqlalchemy.orm import Session
 from app.models import User
 from app.db.deps import get_db
 from app.core.security import decode_verification_token
-from app.utils.enums import  UserStatusEnum
+from app.utils.enums import UserStatusEnum
+from app.utils.response_helper import create_response
 
-router = APIRouter()
+verify_email_router = APIRouter()
 
-@router.get("/verify_email/{token}", status_code=status.HTTP_200_OK)
+@verify_email_router.get("/{token}", status_code=status.HTTP_200_OK)
 async def verify_email(token: str, db: Session = Depends(get_db)):
     """
     Verify the user's email address using the token.
@@ -19,11 +20,19 @@ async def verify_email(token: str, db: Session = Depends(get_db)):
     if not user:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
-            detail="User not found or token invalid.",
+            detail=create_response(
+                status="error",
+                msg="User not found or token invalid.",
+                data=None
+            ),
         )
 
     if user.status == UserStatusEnum.ACTIVE:
-        return {"message": "Email is already verified."}
+        return create_response(
+            status="success",
+            msg="Email is already verified.",
+            data=None
+        )
 
     try:
         # Decode the token to ensure it is valid and not expired
@@ -31,7 +40,11 @@ async def verify_email(token: str, db: Session = Depends(get_db)):
     except ValueError as e:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail=str(e),
+            detail=create_response(
+                status="error",
+                msg=str(e),
+                data=None
+            ),
         )
 
     # Mark the email as verified
@@ -39,4 +52,8 @@ async def verify_email(token: str, db: Session = Depends(get_db)):
     user.verification_token = None  # Clear the token after successful verification
     db.commit()
 
-    return {"message": "Email verified successfully."}
+    return create_response(
+        status="success",
+        msg="Email verified successfully.",
+        data={"user_id": user.id}
+    )

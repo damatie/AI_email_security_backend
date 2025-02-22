@@ -30,7 +30,7 @@ def init_db(db: Session) -> None:
 def init_roles(db: Session) -> None:
     """
     Initialize the default roles in the database.
-    This creates SUPER_ADMIN, COMPANY_ADMIN, and USER roles if they don't exist.
+    This creates roles defined in RoleEnum if they don't exist.
     """
     try:
         # Loop through each role type defined in RoleEnum
@@ -42,10 +42,20 @@ def init_roles(db: Session) -> None:
                 # Get permissions for this role from our permissions utility
                 role_permissions = get_default_permissions(role_enum)
                 
-                # Create new role
+                # Create new role with a detailed description
+                role_descriptions = {
+                    RoleEnum.SUPER_ADMIN: "System-wide administrator with full access.",
+                    RoleEnum.COMPANY_ADMIN: "Admin for managing the organization and its users.",
+                    RoleEnum.COMPANY_MANAGER: "Manager for overseeing teams within the organization.",
+                    RoleEnum.COMPANY_ANALYST: "Security analyst focused on monitoring and threat analysis.",
+                    RoleEnum.COMPANY_USER: "Standard business user with basic access.",
+                    RoleEnum.SUPPORT_AGENT: "Support agent for assisting users with issues.",
+                    RoleEnum.INDIVIDUAL_USER: "Individual user with personal email security features."
+                }
+
                 new_role = Role(
                     name=role_enum,
-                    description=f"{role_enum.value} role",
+                    description=role_descriptions.get(role_enum, f"{role_enum.value} role"),
                     permissions=role_permissions  # This is stored as JSON in the database
                 )
                 
