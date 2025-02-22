@@ -10,13 +10,13 @@ import datetime
 import whois
 from datetime import datetime, timezone
 from app.utils.enums import ConfidenceLevelEnum, ThreatSeverityEnum,ThreatTypeEnum
-from app.core.config import  Settings
+from app.core.config import  settings
 
 
 # Load Pretrained RoBERTa Model for Phishing Detection
 
-tokenizer = RobertaTokenizer.from_pretrained(Settings.MODEL_NAME)
-model = RobertaForSequenceClassification.from_pretrained(Settings.MODEL_NAME, num_labels=2)
+tokenizer = RobertaTokenizer.from_pretrained(settings.MODEL_NAME)
+model = RobertaForSequenceClassification.from_pretrained(settings.MODEL_NAME, num_labels=2)
 predictor = pipeline("text-classification", model=model, tokenizer=tokenizer)
 
 # Load spaCy for text analysis
@@ -43,7 +43,7 @@ def check_url_reputation(url: str):
     
     headers = {
         "accept": "application/json",
-        "x-apikey": Settings.VIRUSTOTAL_API_KEY
+        "x-apikey": settings.VIRUSTOTAL_API_KEY
     }
     
     try:

@@ -8,8 +8,8 @@ import secrets
 class Settings(BaseSettings):
     # Project settings
     PROJECT_NAME: str = "Email Security System"
-    VERSION: str = "1.0.0"
-    API_V1_STR: str = "/api/v1"
+    VERSION: str = "v1"
+    API_V1_STR: str = f"/api/{VERSION}"
     
     # Server settings
     HOST: str = "0.0.0.0"
@@ -82,9 +82,9 @@ class Settings(BaseSettings):
     GMAIL_PUBSUB_TOPIC:str ="projects/capable-boulder-433420-m2/topics/gmail-notifications"
     
     # API Documentation settings
-    DOCS_URL: Optional[str] = "/api/docs"
-    REDOC_URL: Optional[str] = "/api/redoc"
-    OPENAPI_URL: Optional[str] = "/api/openapi.json"
+    DOCS_URL: Optional[str] = f"/api/{VERSION}/docs"
+    REDOC_URL: Optional[str] = f"/api/{VERSION}/redoc"
+    OPENAPI_URL: Optional[str] = f"/api/{VERSION}/openapi.json"
     
     # Rate Limiting settings
     RATE_LIMIT_PER_SECOND: int = 10
